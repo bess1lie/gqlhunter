@@ -40,23 +40,14 @@ pytest
 ruff check .
 ```
 
-> Note: as of this writing the `dev` extra referenced by CI is not declared in
-> `pyproject.toml`. If `pip install -e ".[dev]"` fails, install the dev tools
-> directly: `pip install pytest ruff respx`.
-
 ## Verify the install
 
 ```bash
 gqlhunter --version
-# gqlhunter v0.1.0 — by bess1lie
+# gqlhunter v0.2.0 — by bess1lie
 
 gqlhunter --help
 ```
-
-> The `--version` string in the installed package reads `0.1.0` from
-> `gqlhunter/__init__.py`. The README and docs describe the v0.2.0 feature
-> set. This version-label mismatch is a known issue — the code itself is at
-> the v0.2.0 feature level.
 
 ## Docker alternative
 

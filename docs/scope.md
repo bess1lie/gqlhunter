@@ -25,28 +25,32 @@ template_dir: ./templates
 |---|---|
 | `targets` | List of host patterns to scan. Entries starting with `!` are **deny** patterns. |
 | `allowlist` | Fallback host patterns used by `is_in_scope` / `can_scan` when `targets` is empty. |
+| `deny` | Top-level list of host patterns to always refuse. Equivalent to `!`-prefix entries in `targets`. |
 | `template_dir` | Optional path to custom Jinja2 templates for the `notify` command. Can also be nested under `notify.template_dir`. |
 
-### Important: `deny:` is not read
+### Deny via `deny:` key or `!`-prefix
 
-The `Scope` class **only reads `targets`, `allowlist` and `template_dir`**. A
-top-level `deny:` key in the YAML file is silently ignored. To deny a host,
-prefix the entry with `!` inside `targets`:
+There are two equivalent ways to deny a host:
 
-```yaml
-# correct — admin.trevorblades.com is denied
-targets:
-  - "*.trevorblades.com"
-  - "!admin.trevorblades.com"
-```
+1. **`deny:` key** (top-level list):
+   ```yaml
+   targets:
+     - "*.example.com"
+   deny:
+     - "admin.example.com"
+   ```
 
-```yaml
-# WRONG — deny: is ignored, admin.trevorblades.com would still match *.trevorblades.com
-targets:
-  - "*.trevorblades.com"
-deny:
-  - "admin.trevorblades.com"
-```
+2. **`!`-prefix** inside `targets`:
+   ```yaml
+   targets:
+     - "*.example.com"
+     - "!admin.example.com"
+   ```
+
+Both produce the same result. The `deny:` key is read by `Scope.from_yaml`
+and merged with any `!`-prefixed entries in `targets`. Use whichever you
+prefer — `deny:` is more readable for long lists, `!`-prefix keeps everything
+in one place.
 
 ## Matching rules
 

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head><title>gqlhunter Dashboard</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0d1117; color: #c9d1d9; }
+.header { background: #161b22; border-bottom: 1px solid #30363d; padding: 1em 2em; }
+.header h1 { color: #58a6ff; font-size: 1.3em; }
+.header span { color: #8b949e; font-size: 0.85em; margin-left: 1em; }
+.container { max-width: 1200px; margin: 0 auto; padding: 2em; }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1em; margin-bottom: 2em; }
+.stat-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 1.5em; }
+.stat-card .label { color: #8b949e; font-size: 0.85em; }
+.stat-card .value { font-size: 1.8em; font-weight: bold; color: #58a6ff; margin-top: 0.3em; }
+.stat-card.high .value { color: #f85149; }
+.runs-table { background: #161b22; border: 1px solid #30363d; border-radius: 8px; overflow: hidden; }
+.runs-table table { width: 100%; border-collapse: collapse; }
+.runs-table th { background: #1c2128; color: #8b949e; text-align: left; padding: 1em; font-size: 0.85em; border-bottom: 1px solid #30363d; }
+.runs-table td { padding: 1em; border-bottom: 1px solid #30363d; color: #c9d1d9; }
+.runs-table tr:last-child td { border-bottom: none; }
+.runs-table tr:hover { background: #1c2128; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.8em; }
+.badge.high { background: #f8514920; color: #f85149; border: 1px solid #f8514940; }
+.badge.medium { background: #d2992220; color: #d29922; border: 1px solid #d2992240; }
+.badge.low { background: #58a6ff20; color: #58a6ff; border: 1px solid #58a6ff40; }
+.section-title { color: #f0883e; margin: 1.5em 0 1em; font-size: 1.1em; }
+.filter-bar { display: flex; gap: 1em; margin-bottom: 1.5em; }
+.filter-bar input { background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 0.6em 1em; color: #c9d1d9; width: 300px; }
+.filter-bar select { background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 0.6em 1em; color: #c9d1d9; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>⚡ gqlhunter <span>Dashboard — localhost:8080</span></h1>
+</div>
+<div class="container">
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="label">Total Scans</div>
+      <div class="value">7</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Endpoints Monitored</div>
+      <div class="value">3</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Total Risks</div>
+      <div class="value">42</div>
+    </div>
+    <div class="stat-card high">
+      <div class="label">High Severity</div>
+      <div class="value">6</div>
+    </div>
+  </div>
+
+  <div class="section-title">Scan Runs</div>
+  <div class="filter-bar">
+    <input type="text" placeholder="Filter by endpoint...">
+    <select><option>All severities</option><option>High</option><option>Medium</option><option>Low</option></select>
+  </div>
+  <div class="runs-table">
+    <table>
+      <tr><th>Run ID</th><th>Endpoint</th><th>Date</th><th>Types</th><th>Queries</th><th>Mutations</th><th>High</th><th>Medium</th><th>Low</th></tr>
+      <tr><td>1</td><td><code>api.example.com/graphql</code></td><td>2026-06-30 10:00</td><td>12</td><td>8</td><td>3</td><td><span class="badge high">2</span></td><td><span class="badge medium">1</span></td><td><span class="badge low">3</span></td></tr>
+      <tr><td>2</td><td><code>api.example.com/graphql</code></td><td>2026-06-29 14:30</td><td>12</td><td>8</td><td>3</td><td><span class="badge high">2</span></td><td><span class="badge medium">1</span></td><td><span class="badge low">3</span></td></tr>
+      <tr><td>3</td><td><code>api.example.com/graphql</code></td><td>2026-06-28 09:15</td><td>11</td><td>7</td><td>3</td><td><span class="badge high">1</span></td><td><span class="badge medium">1</span></td><td><span class="badge low">2</span></td></tr>
+      <tr><td>4</td><td><code>shop.test.com/graphql</code></td><td>2026-06-27 16:45</td><td>24</td><td>15</td><td>8</td><td><span class="badge high">5</span></td><td><span class="badge medium">3</span></td><td><span class="badge low">7</span></td></tr>
+      <tr><td>5</td><td><code>shop.test.com/graphql</code></td><td>2026-06-26 11:20</td><td>24</td><td>15</td><td>8</td><td><span class="badge high">5</span></td><td><span class="badge medium">3</span></td><td><span class="badge low">6</span></td></tr>
+      <tr><td>6</td><td><code>api.demo.local/graphql</code></td><td>2026-06-25 08:00</td><td>6</td><td>4</td><td>1</td><td><span class="badge high">0</span></td><td><span class="badge medium">1</span></td><td><span class="badge low">1</span></td></tr>
+      <tr><td>7</td><td><code>api.demo.local/graphql</code></td><td>2026-06-24 10:30</td><td>6</td><td>4</td><td>1</td><td><span class="badge high">0</span></td><td><span class="badge medium">1</span></td><td><span class="badge low">1</span></td></tr>
+    </table>
+  </div>
+</div>
+</body>
+</html>

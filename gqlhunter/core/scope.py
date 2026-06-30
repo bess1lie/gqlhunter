@@ -13,6 +13,7 @@ import yaml
 class Scope:
     allowlist: list[str] = field(default_factory=list)
     targets: list[str] = field(default_factory=list)
+    deny: list[str] = field(default_factory=list)
     template_dir: str | None = None
 
     @classmethod
@@ -25,6 +26,7 @@ class Scope:
         return cls(
             allowlist=data.get("allowlist", []),
             targets=data.get("targets", []),
+            deny=data.get("deny", []),
             template_dir=data.get("template_dir") or (data.get("notify") or {}).get("template_dir"),
         )
 
@@ -39,6 +41,7 @@ class Scope:
             return False
 
         deny_patterns = [p.lstrip("!") for p in self.targets if self._is_deny_pattern(p)]
+        deny_patterns.extend(self.deny)
         allow_patterns = [p for p in self.targets if not self._is_deny_pattern(p)]
 
         for pattern in deny_patterns:
@@ -64,4 +67,5 @@ class Scope:
         return {
             "allowlist": self.allowlist,
             "targets": self.targets,
+            "deny": self.deny,
         }

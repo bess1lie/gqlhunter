@@ -57,3 +57,29 @@ def test_from_yaml(tmp_path: Path) -> None:
     s = Scope.from_yaml(str(yml))
     assert "*.example.com" in s.targets
     assert "*.example.com" in s.allowlist
+
+
+def test_deny_key_from_yaml(tmp_path: Path) -> None:
+    yml = tmp_path / "scope.yaml"
+    yml.write_text("targets:\n  - '*.example.com'\ndeny:\n  - 'admin.example.com'\n")
+    s = Scope.from_yaml(str(yml))
+    assert s.deny == ["admin.example.com"]
+    assert s.can_scan("api.example.com") is True
+    assert s.can_scan("admin.example.com") is False
+
+
+def test_deny_key_with_allowlist(tmp_path: Path) -> None:
+    yml = tmp_path / "scope.yaml"
+    yml.write_text("allowlist:\n  - '*.example.com'\ndeny:\n  - 'internal.example.com'\n")
+    s = Scope.from_yaml(str(yml))
+    assert s.can_scan("api.example.com") is True
+    assert s.can_scan("internal.example.com") is False
+
+
+def test_deny_key_and_exclamation_combined(tmp_path: Path) -> None:
+    yml = tmp_path / "scope.yaml"
+    yml.write_text("targets:\n  - '*.example.com'\n  - '!staging.example.com'\ndeny:\n  - 'admin.example.com'\n")
+    s = Scope.from_yaml(str(yml))
+    assert s.can_scan("api.example.com") is True
+    assert s.can_scan("staging.example.com") is False
+    assert s.can_scan("admin.example.com") is False

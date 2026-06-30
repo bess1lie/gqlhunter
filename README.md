@@ -2,8 +2,9 @@
   <img src="https://img.shields.io/badge/gqlhunter-0.2.0-58a6ff?style=for-the-badge">
   <img src="https://img.shields.io/github/actions/workflow/status/bess1lie/gqlhunter/ci.yml?style=for-the-badge&logo=github&label=CI">
   <img src="https://img.shields.io/badge/tests-195_passed-brightgreen?style=for-the-badge&logo=pytest">
-  <img src="https://img.shields.io/github/license/bess1lie/gqlhunter?style=for-the-badge">
   <img src="https://img.shields.io/github/v/release/bess1lie/gqlhunter?style=for-the-badge">
+  <img src="https://img.shields.io/github/license/bess1lie/gqlhunter?style=for-the-badge">
+  <img src="https://img.shields.io/github/languages/top/bess1lie/gqlhunter?style=for-the-badge">
 </p>
 
 <p align="center">
@@ -45,9 +46,8 @@ $ gqlhunter dashboard --db gqlhunter.db
 Dashboard started at http://127.0.0.1:8080
 ```
 
-| Report | Dashboard |
-|--------|-----------|
-| ![Report](screenshots/report-preview.png) | ![Dashboard](screenshots/dashboard-preview.png) |
+![Report Preview](screenshots/report-preview.png) | ![Dashboard Preview](screenshots/dashboard-preview.png)
+--- | ---
 
 [Sample HTML report](screenshots/report.html)
 
@@ -60,6 +60,22 @@ GraphQL APIs expose the entire data model through a single endpoint. Manual test
 gqlhunter automates the ground work: endpoint discovery, schema introspection, risk classification (by field-name heuristics), IDOR candidate detection, auth analysis, and change tracking across scan runs.
 
 It complements Burp Suite and GraphQL Voyager by handling the recon layer before you dive deeper.
+
+---
+
+## Comparison
+
+| Feature | Manual Workflow | GraphQL Voyager | gqlhunter |
+|---------|---------------|-----------------|-----------|
+| Endpoint discovery | ❌ | ❌ | ✓ |
+| Introspection | Manual query | ✓ | ✓ |
+| Risk heuristics | ❌ | ❌ | ✓ |
+| IDOR candidates | ❌ | ❌ | ✓ |
+| Auth comparison | Manual | ❌ | ✓ |
+| Session persistence | ❌ | ❌ | ✓ |
+| Schema diff | ❌ | ❌ | ✓ |
+| Dashboard | ❌ | ❌ | ✓ |
+| SARIF export | ❌ | ❌ | ✓ |
 
 ---
 
@@ -81,6 +97,10 @@ flowchart LR
     DB --> E[Export]
     DB --> N[Diff / Notify]
 ```
+
+| | | | |
+|---|---|---|---|
+| <b>195+</b><br>Tests | <b>10</b><br>CLI Commands | <b>18</b><br>Discovery Paths | <b>7</b><br>Database Tables |
 
 ---
 
@@ -112,38 +132,6 @@ Template-based Slack, Telegram, and webhook notifications.
 
 ### 🐳 Docker
 Ready-to-use Dockerfile and docker-compose.
-
----
-
-## Built With
-
-[![Python](https://img.shields.io/badge/Python-3.11+-blue?logo=python)](https://python.org)
-[![Typer](https://img.shields.io/badge/Typer-CLI-333?logo=python)](https://typer.tiangolo.com)
-[![httpx](https://img.shields.io/badge/httpx-Async-333)](https://www.python-httpx.org)
-[![SQLite](https://img.shields.io/badge/SQLite-DB-003B57?logo=sqlite)](https://sqlite.org)
-[![Jinja2](https://img.shields.io/badge/Jinja2-Reports-B41717?logo=jinja)](https://jinja.palletsprojects.com)
-[![Rich](https://img.shields.io/badge/Rich-Terminal-333)](https://rich.readthedocs.io)
-
-| | |
-|---|---|
-| **195 tests** across all modules | **10 CLI commands** from discovery to dashboard |
-| **18 discovery paths** scanned | **7 database tables** for full audit trail |
-
----
-
-## Comparison
-
-| Feature | Manual Workflow | GraphQL Voyager | gqlhunter |
-|---------|---------------|-----------------|-----------|
-| Endpoint discovery | ❌ | ❌ | ✓ |
-| Introspection | Manual query | ✓ | ✓ |
-| Risk heuristics | ❌ | ❌ | ✓ |
-| IDOR candidates | ❌ | ❌ | ✓ |
-| Auth comparison | Manual | ❌ | ✓ |
-| Session persistence | ❌ | ❌ | ✓ |
-| Schema diff | ❌ | ❌ | ✓ |
-| Dashboard | ❌ | ❌ | ✓ |
-| SARIF export | ❌ | ❌ | ✓ |
 
 ---
 
@@ -222,6 +210,19 @@ Jinja2 auto-escape enabled for all `["html", "xml"]`. Confirmed by `test_script_
 
 ---
 
+## Releases
+
+### v0.2 — Current Release
+- [x] Auth persistence · Query variants · Dashboard · SARIF · 195 tests
+
+### v0.3 — Next
+- [ ] Batch diff over N runs
+- [ ] WebSocket subscription tester
+- [ ] VS Code extension (inline severity badges)
+- [ ] REST → GraphQL bridge detection
+
+---
+
 ## Project Structure
 
 ```
@@ -241,31 +242,10 @@ gqlhunter/
 
 ---
 
-## Releases
-
-### v0.2 — Current
-- [x] Auth persistence · Query variants · Dashboard · SARIF · 195 tests
-
-### v0.3 — Next
-- [ ] Batch diff over N runs
-- [ ] WebSocket subscription tester
-- [ ] VS Code extension (inline severity badges)
-- [ ] REST → GraphQL bridge detection
-
----
-
 ## Ethics
 
 > Designed for **authorized security testing only**. Detection-only — never auto-executes mutations or brute-forces credentials.
 
 ---
 
-<p align="center">
-  <b>gqlhunter</b> — GraphQL recon, automated.<br>
-  <i>Sister project:</i> <a href="https://github.com/bess1lie/bounthunt">bounthunt</a>
-</p>
-
-<p align="center">
-  <a href="https://github.com/bess1lie">bess1lie</a> ·
-  <a href="LICENSE">MIT License</a>
-</p>
+<p align="center"><b>gqlhunter</b> — GraphQL recon, automated. · <i>Sister project:</i> <a href="https://github.com/bess1lie/bounthunt">bounthunt</a> · <a href="LICENSE">MIT License</a> · <a href="https://github.com/bess1lie">bess1lie</a></p>

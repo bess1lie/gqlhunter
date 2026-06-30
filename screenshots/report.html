@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>gqlhunter — GraphQL Schema Report</title>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    margin: 0; padding: 20px; background: #f8f9fa; color: #212529;
+  }
+  .container {
+    max-width: 960px; margin: 0 auto; background: #fff; padding: 24px;
+    border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.1);
+  }
+  h1 { margin-top: 0; color: #212529; }
+  h2 { border-bottom: 2px solid #dee2e6; padding-bottom: 8px; margin-top: 32px; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+  th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #dee2e6; }
+  th { background: #e9ecef; font-weight: 600; }
+  code { background: #e9ecef; padding: 2px 6px; border-radius: 4px; font-size: .875em; }
+  .meta { color: #6c757d; font-size: .875em; }
+  .severity-tag {
+    display: inline-block; padding: 2px 8px; border-radius: 4px; color: #fff;
+    font-size: .75em; font-weight: 700; text-transform: uppercase;
+  }
+  .disclaimer {
+    background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px;
+    padding: 12px 16px; margin-bottom: 24px; font-size: .875em;
+  }
+  .tabs { display: flex; gap: 4px; margin-bottom: 16px; flex-wrap: wrap; }
+  .tab-btn {
+    padding: 6px 16px; border: 1px solid #dee2e6; border-radius: 4px 4px 0 0;
+    background: #f8f9fa; cursor: pointer; font-size: .875em; font-weight: 600;
+    transition: background .15s;
+  }
+  .tab-btn:hover { background: #e9ecef; }
+  .tab-btn.active { background: #fff; border-bottom-color: #fff; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .empty { color: #6c757d; font-style: italic; }
+  .footer {
+    margin-top: 32px; padding-top: 16px; border-top: 1px solid #dee2e6;
+    font-size: .75em; color: #6c757d;
+  }
+  .findings-count {
+    display: inline-block; padding: 0 6px; border-radius: 8px;
+    font-size: .75em; font-weight: 700; color: #fff; margin-left: 4px;
+  }
+</style>
+<script>
+function showTab(severity) {
+  document.querySelectorAll('.tab-content').forEach(function(el) {
+    el.classList.remove('active');
+  });
+  document.querySelectorAll('.tab-btn').forEach(function(el) {
+    el.classList.remove('active');
+  });
+  var content = document.getElementById('findings-' + severity);
+  var btn = document.querySelector('[data-severity="' + severity + '"]');
+  if (content) content.classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+</script>
+</head>
+<body>
+<div class="container">
+
+<div class="disclaimer">
+  <strong>Disclaimer:</strong> All findings below are <strong>heuristic</strong> —
+  based on field/argument names. "Potential" means manual verification is required,
+  <em>not</em> confirmed vulnerability. This tool performs detection-only analysis;
+  mutations are never executed automatically.
+</div>
+
+<h1>gqlhunter — GraphQL Schema Report</h1>
+<p class="meta">
+  <strong>Target:</strong> https://countries.trevorblades.com/graphql<br>
+  <strong>Scan Run ID:</strong> 1<br>
+  <strong>Date:</strong> 2026-06-30 09:52:12
+</p>
+
+<h2>Discovered Endpoints</h2>
+
+<table>
+  <thead><tr><th>URL</th><th>Status</th></tr></thead>
+  <tbody>
+  
+    <tr><td><code>https://countries.trevorblades.com/graphql</code></td><td><code>enabled</code></td></tr>
+  
+  </tbody>
+</table>
+
+
+<h2>Schema Overview</h2>
+
+  <p>
+    <strong>Query Type:</strong> <code>Query</code><br>
+    <strong>Mutation Type:</strong> <code>—</code><br>
+    <strong>Subscription Type:</strong> <code>—</code><br>
+    <strong>Total Types:</strong> 15
+  </p>
+
+  <h3>Queries (6)</h3>
+  
+  <table>
+    <thead><tr><th>Field</th><th>Return Type</th><th>Args</th></tr></thead>
+    <tbody>
+    
+      <tr>
+        <td><code>continent</code></td>
+        <td><code>Continent</code></td>
+        <td>[, {, &#34;, n, a, m, e, &#34;, :,  , &#34;, c, o, d, e, &#34;, ,,  , &#34;, t, y, p, e, &#34;, :,  , &#34;, N, O, N, _, N, U, L, L, &#34;, }, ]</td>
+      </tr>
+    
+      <tr>
+        <td><code>continents</code></td>
+        <td><code>—</code></td>
+        <td>[, {, &#34;, n, a, m, e, &#34;, :,  , &#34;, f, i, l, t, e, r, &#34;, ,,  , &#34;, t, y, p, e, &#34;, :,  , &#34;, C, o, n, t, i, n, e, n, t, F, i, l, t, e, r, I, n, p, u, t, &#34;, }, ]</td>
+      </tr>
+    
+      <tr>
+        <td><code>countries</code></td>
+        <td><code>—</code></td>
+        <td>[, {, &#34;, n, a, m, e, &#34;, :,  , &#34;, f, i, l, t, e, r, &#34;, ,,  , &#34;, t, y, p, e, &#34;, :,  , &#34;, C, o, u, n, t, r, y, F, i, l, t, e, r, I, n, p, u, t, &#34;, }, ]</td>
+      </tr>
+    
+      <tr>
+        <td><code>country</code></td>
+        <td><code>Country</code></td>
+        <td>[, {, &#34;, n, a, m, e, &#34;, :,  , &#34;, c, o, d, e, &#34;, ,,  , &#34;, t, y, p, e, &#34;, :,  , &#34;, N, O, N, _, N, U, L, L, &#34;, }, ]</td>
+      </tr>
+    
+      <tr>
+        <td><code>language</code></td>
+        <td><code>Language</code></td>
+        <td>[, {, &#34;, n, a, m, e, &#34;, :,  , &#34;, c, o, d, e, &#34;, ,,  , &#34;, t, y, p, e, &#34;, :,  , &#34;, N, O, N, _, N, U, L, L, &#34;, }, ]</td>
+      </tr>
+    
+      <tr>
+        <td><code>languages</code></td>
+        <td><code>—</code></td>
+        <td>[, {, &#34;, n, a, m, e, &#34;, :,  , &#34;, f, i, l, t, e, r, &#34;, ,,  , &#34;, t, y, p, e, &#34;, :,  , &#34;, L, a, n, g, u, a, g, e, F, i, l, t, e, r, I, n, p, u, t, &#34;, }, ]</td>
+      </tr>
+    
+    </tbody>
+  </table>
+  
+
+  
+
+
+<h2>Risk Findings</h2>
+
+  <p class="empty">No heuristic risk findings.</p>
+
+
+<h2>Auth Analysis</h2>
+
+<p class="empty">No auth analysis results. Run <code>gqlhunter auth</code> first.</p>
+
+
+<div class="footer">
+  Report generated by <a href="https://github.com/bess1lie/gqlhunter">gqlhunter</a> v0.1.0
+</div>
+
+</div>
+</body>
+</html>

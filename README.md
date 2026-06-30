@@ -43,6 +43,32 @@ gqlhunter dashboard --db gqlhunter.db
 
 ---
 
+## Why gqlhunter?
+
+GraphQL APIs are fundamentally different from REST. A single endpoint exposes the entire data model — every query, mutation, type, and relationship. Manual testing means:
+
+- **Copy-pasting introspection queries** — every session
+- **Manually reading schema JSON** — 500+ lines of nested types
+- **No change tracking** — did the schema change since last week?
+- **No risk prioritisation** — which fields are actually dangerous?
+
+gqlhunter automates all of this. It introspects the schema, classifies risks by field names (`delete*`, `admin*`, `reset*`), detects IDOR candidates, analyzes auth requirements, and tracks changes over time.
+
+It's not a replacement for Burp Suite or GraphQL Voyager. It's a **recon layer** that tells you where to look before you dive deep.
+
+---
+
+## Use Cases
+
+| Role | What gqlhunter gives them |
+|------|---------------------------|
+| 🕵️ **Bug Bounty Hunter** | Find IDOR candidates, public endpoints, risky mutations |
+| 🔒 **Penetration Tester** | Schema analysis, auth bypass testing, SARIF export for reporting |
+| 🛡️ **DevSecOps** | Track schema changes across deployments, automate scanning in CI |
+| 👨‍💻 **Developer** | Understand what your GraphQL API exposes before attackers do |
+
+---
+
 ## Ethics & Disclaimer
 
 gqlhunter is designed exclusively for **authorised security testing** (bug bounty programmes,
@@ -182,6 +208,16 @@ $ gqlhunter scan https://example.com/graphql
 $ gqlhunter dashboard --db gqlhunter.db
 Dashboard started at http://127.0.0.1:8080
 ```
+
+**HTML Report Preview:**
+
+![Report Preview](screenshots/report-preview.png)
+
+**Dashboard Preview:**
+
+![Dashboard Preview](screenshots/dashboard-preview.png)
+
+[View sample HTML report](screenshots/report.html) · [View sample Markdown report](screenshots/report.md)
 
 ## Features
 

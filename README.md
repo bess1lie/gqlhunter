@@ -1,15 +1,45 @@
-# gqlhunter
+```
+   _____ ____  _   _ _   _ _____ _   _ _____ ____
+  / ____/ ___|| | | | \ | |_   _| \ | |_   _|  _ \
+ | |  _\___ \| | | |  \| | | | |  \| | | | | |_) |
+ | | |___ __) | |_| | |\  | | | | |\  | | | |  __/
+ |_|_____|____/ \___/|_| \_| |_| |_| \_| |_| |_|
+```
+
+# ⚡ gqlhunter
 
 [![CI](https://github.com/bess1lie/gqlhunter/actions/workflows/ci.yml/badge.svg)](https://github.com/bess1lie/gqlhunter/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![Tests](https://img.shields.io/badge/tests-195-green.svg)]()
+[![Tests](https://img.shields.io/badge/tests-195_passed-green)](tests/)
+[![Last commit](https://img.shields.io/github/last-commit/bess1lie/gqlhunter)](https://github.com/bess1lie/gqlhunter/commits/main)
+[![Languages](https://img.shields.io/github/languages/top/bess1lie/gqlhunter)](https://github.com/bess1lie/gqlhunter)
 
 **GraphQL recon & analysis CLI** — schema discovery, risk classification, IDOR candidate
 detection, auth analysis, and diff for authorised bug bounty programmes.
 
 > Sister project to [bounthunt](https://github.com/bess1lie/bounthunt) — automated web recon for bug bounty programmes.
-> Same philosophy: **detection-only, no auto-exploitation.**
+
+---
+
+## Quick example
+
+```bash
+# Discover GraphQL endpoints
+gqlhunter discover https://example.com --scope scope.yaml
+
+# Full scan: introspection → schema → risk analysis
+gqlhunter scan https://example.com/graphql --scope scope.yaml
+
+# Auth bypass analysis with session persistence
+gqlhunter auth https://example.com/graphql --auth-header "Bearer <token>" --save-session session.json
+
+# HTML report with tabbed findings
+gqlhunter report --db gqlhunter.db --format html --output report.html
+
+# Launch web dashboard
+gqlhunter dashboard --db gqlhunter.db
+```
 
 ---
 
@@ -130,30 +160,53 @@ gqlhunter dashboard --db ./gqlhunter.db
 gqlhunter dashboard --db ./gqlhunter.db --host 0.0.0.0 --port 9090  # network access
 ```
 
+### Demo
+
+```bash
+$ gqlhunter discover https://example.com --scope scope.yaml
+╭───────────────── Discovered GraphQL Endpoints ─────────────────╮
+│ URL                                        │ Status           │
+├────────────────────────────────────────────┼──────────────────┤
+│ https://example.com/graphql                │ 200 OK           │
+│ https://example.com/api/graphql            │ 404 Not Found    │
+│ https://example.com/graphiql               │ 200 OK           │
+╰────────────────────────────────────────────┴──────────────────╯
+
+$ gqlhunter scan https://example.com/graphql
+╭────────────────────── Scan Summary ──────────────────────╮
+│ Schema: 12 types, 8 queries, 3 mutations                │
+│ Risk findings: 2 high, 1 medium, 3 low                  │
+│ Auth classification: accessible without token (public)   │
+╰──────────────────────────────────────────────────────────╯
+
+$ gqlhunter dashboard --db gqlhunter.db
+Dashboard started at http://127.0.0.1:8080
+```
+
 ## Features
 
 | Domain | Feature |
 |--------|---------|
-| **Discovery** | Endpoint discovery (18 common paths + custom) |
-| **Schema** | Introspection query + 6-status classification |
+| 🔍 **Discovery** | Endpoint discovery (18 common paths + custom) |
+| 📐 **Schema** | Introspection query + 6-status classification |
 | | Schema parsing & SQLite storage |
 | | Cyclic schema guard (`max_depth=3`) |
 | | Configurable introspection depth (`--max-depth`) ¹ |
-| **Analysis** | Risk classification (field-name heuristics) |
+| 🧠 **Analysis** | Risk classification (field-name heuristics) |
 | | IDOR candidate detection (argument heuristics) |
 | | Read-only query & mutation generator |
 | | Query variant engine (single / combinations / random) ¹ |
-| **Auth** | Auth bypass analysis (with/without token) |
+| 🔑 **Auth** | Auth bypass analysis (with/without token) |
 | | Persistent auth sessions (`--session` / `--save-session`) ¹ |
-| **Diff & Export** | Schema diff across scan runs (Added / Modified / Removed) |
+| 🔁 **Diff & Export** | Schema diff across scan runs (Added / Modified / Removed) |
 | | JSON export (no tokens leaked, auth results included) |
 | | SARIF export ¹ |
-| **Reporting** | Markdown & HTML reports (Jinja2, XSS-guarded) |
+| 📊 **Reporting** | Markdown & HTML reports (Jinja2, XSS-guarded) |
 | | Tabbed findings by severity ¹ |
 | | Severity filtering (`--severity`) ¹ |
-| **Dashboard** | Web dashboard (`gqlhunter dashboard`) ¹ |
-| **Notifications** | Template-based (Slack, Telegram, Webhook) ¹ |
-| **Deployment** | Docker support |
+| 🖥️ **Dashboard** | Web dashboard (`gqlhunter dashboard`) ¹ |
+| 📬 **Notifications** | Template-based (Slack, Telegram, Webhook) ¹ |
+| 🐳 **Deployment** | Docker support |
 
 ¹ Added in v0.2.0 — all other features were in v0.1.0.
 

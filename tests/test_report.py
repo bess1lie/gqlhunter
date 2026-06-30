@@ -70,5 +70,67 @@ class TestHtmlXssGuard:
         assert "42" in html
         assert "users" in html
         assert "createUser" in html
-        assert "high" in html
         assert "Potential admin mutation" in html
+
+    def test_tabbed_findings_grouped_by_severity(self) -> None:
+        findings = [
+            {"severity": "critical", "category": "sql_injection", "detail": "SQLI risk"},
+            {"severity": "high", "category": "auth_bypass", "detail": "Auth bypass"},
+            {"severity": "medium", "category": "info_leak", "detail": "Info leak"},
+            {"severity": "low", "category": "deprecated", "detail": "Deprecated field"},
+            {"severity": "info", "category": "note", "detail": "Note"},
+        ]
+        html = render_html(
+            target="https://example.com/graphql",
+            scan_run_id=1,
+            date="2026-01-01",
+            endpoints=[],
+            schema={"query_type": "Query", "mutation_type": None, "subscription_type": None, "total_types": 0, "queries": [], "mutations": []},
+            findings=findings,
+        )
+        assert 'id="findings-critical"' in html
+        assert 'id="findings-high"' in html
+        assert 'id="findings-medium"' in html
+        assert 'id="findings-low"' in html
+        assert 'id="findings-info"' in html
+        assert "SQLI risk" in html
+        assert "Auth bypass" in html
+        assert "Info leak" in html
+        assert "Deprecated field" in html
+        assert "Note" in html
+
+    def test_operations_are_sorted_alphabetically(self) -> None:
+        html = render_html(
+            target="https://example.com/graphql",
+            scan_run_id=1,
+            date="2026-01-01",
+            endpoints=[],
+            schema={
+                "query_type": "Query",
+                "mutation_type": "Mutation",
+                "subscription_type": None,
+                "total_types": 3,
+                "queries": [
+                    {"name": "aaaFirst", "return_type": "String", "args": []},
+                    {"name": "zzzLast", "return_type": "String", "args": []},
+                ],
+                "mutations": [
+                    {"name": "mmmMut", "return_type": "String", "args": []},
+                ],
+            },
+            findings=[],
+        )
+        aaa_pos = html.index("aaaFirst")
+        zzz_pos = html.index("zzzLast")
+        assert aaa_pos < zzz_pos
+
+    def test_tabbed_findings_empty(self) -> None:
+        html = render_html(
+            target="https://example.com/graphql",
+            scan_run_id=1,
+            date="2026-01-01",
+            endpoints=[],
+            schema={"query_type": "Query", "mutation_type": None, "subscription_type": None, "total_types": 0, "queries": [], "mutations": []},
+            findings=[],
+        )
+        assert "No heuristic risk findings" in html

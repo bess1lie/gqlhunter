@@ -82,14 +82,74 @@ class IntrospectionResult:
     error: str | None = None
 
 
+def _build_introspection_query(max_depth: int = 4) -> str:
+    lines = ["    kind", "    name"]
+    for i in range(max_depth):
+        indent = "  " * (2 + i)
+        lines.append(f"{indent}ofType {{")
+        lines.append(f"{indent}  kind")
+        lines.append(f"{indent}  name")
+    for i in range(max_depth - 1, -1, -1):
+        indent = "  " * (2 + i)
+        lines.append(f"{indent}}}")
+
+    fragment_body = "\n".join(lines)
+
+    return f"""\
+query IntrospectionQuery {{
+  __schema {{
+    queryType {{ name }}
+    mutationType {{ name }}
+    subscriptionType {{ name }}
+    types {{
+      kind
+      name
+      description
+      fields(includeDeprecated: true) {{
+        name
+        description
+        args {{
+          name
+          type {{
+            ...TypeRef
+          }}
+        }}
+        type {{
+          ...TypeRef
+        }}
+        isDeprecated
+        deprecationReason
+      }}
+      inputFields {{
+        name
+        type {{ ...TypeRef }}
+      }}
+      interfaces {{ name }}
+      enumValues(includeDeprecated: true) {{ name }}
+      possibleTypes {{ name }}
+    }}
+    directives {{
+      name
+      locations
+    }}
+  }}
+}}
+
+fragment TypeRef on __Type {{
+{fragment_body}
+}}
+"""
+
+
 async def run_introspection(
-    url: str, client: HttpClient, auth_header: str | None = None
+    url: str, client: HttpClient, auth_header: str | None = None, max_depth: int = 4
 ) -> IntrospectionResult:
     headers = {}
     if auth_header:
         headers["Authorization"] = auth_header
 
-    payload = {"query": INTROSPECTION_QUERY}
+    query = _build_introspection_query(max_depth)
+    payload = {"query": query}
 
     try:
         if auth_header:

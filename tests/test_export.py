@@ -44,7 +44,7 @@ class TestCollectExportData:
             db, run_id = _seed_db(db_path)
             run = _run_dict(db, run_id)
             data = _collect_export_data(db, run)
-            assert set(data.keys()) == {"run", "endpoints", "operations", "schema_types"}
+            assert set(data.keys()) == {"run", "endpoints", "operations", "schema_types", "auth_results", "risk_findings"}
             db.close()
 
     def test_run_metadata(self) -> None:
@@ -119,6 +119,8 @@ class TestExportCommand:
             assert output_dir.joinpath("operations.json").exists()
             assert output_dir.joinpath("run.json").exists()
             assert output_dir.joinpath("schema_types.json").exists()
+            assert output_dir.joinpath("auth_results.json").exists()
+            assert output_dir.joinpath("risk_findings.json").exists()
 
     def test_exported_json_is_valid(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -144,6 +146,54 @@ class TestExportCommand:
             )
             assert isinstance(types, list)
             assert len(types) == 2
+
+    def test_operations_sorted_by_type_then_name(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            db_path = Path(tmp) / "test.db"
+            db, run_id = _seed_db(db_path)
+            run = _run_dict(db, run_id)
+            data = _collect_export_data(db, run)
+            names = [o["name"] for o in data["operations"]]
+            # queries before mutations, alphabetical within each
+            assert names == ["me", "users", "updateUser"]
+            assert data["operations"][0]["type"] == "query"
+            assert data["operations"][1]["type"] == "query"
+            assert data["operations"][2]["type"] == "mutation"
+            db.close()
+
+    def test_severity_filter_keeps_high_removes_low(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            db_path = Path(tmp) / "test.db"
+            db = Database(db_path)
+            db.initialize()
+            run_id = db.create_scan_run("https://api.example.com/graphql")
+            db.connect().execute(
+                "INSERT INTO risk_findings (scan_run_id, operation_type, operation_name, severity, category, detail) "
+                "VALUES (?, ?, ?, ?, ?, ?)",
+                (run_id, "query", "users", "high", "auth_bypass", "High finding"),
+            )
+            db.connect().execute(
+                "INSERT INTO risk_findings (scan_run_id, operation_type, operation_name, severity, category, detail) "
+                "VALUES (?, ?, ?, ?, ?, ?)",
+                (run_id, "query", "posts", "low", "deprecated", "Low finding"),
+            )
+            db.finish_scan_run(run_id)
+            run = _run_dict(db, run_id)
+            data = _collect_export_data(db, run, severity_filter="high")
+            details = {f["detail"] for f in data["risk_findings"]}
+            assert "High finding" in details
+            assert "Low finding" not in details
+            db.close()
+
+    def test_severity_filter_none_invalid(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            db_path = Path(tmp) / "test.db"
+            db, run_id = _seed_db(db_path)
+            run = _run_dict(db, run_id)
+            data = _collect_export_data(db, run, severity_filter="invalid")
+            # invalid filter falls through — all findings returned
+            assert "risk_findings" in data
+            db.close()
 
     def test_empty_db_errors(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -172,6 +222,7 @@ class TestExportCommand:
             for fname in (
                 "run.json", "endpoints.json",
                 "operations.json", "schema_types.json",
+                "auth_results.json",
             ):
                 content = output_dir.joinpath(fname).read_text().lower()
                 assert "authorization" not in content, f"{fname} contains 'authorization'"

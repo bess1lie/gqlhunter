@@ -13,6 +13,7 @@ import yaml
 class Scope:
     allowlist: list[str] = field(default_factory=list)
     targets: list[str] = field(default_factory=list)
+    template_dir: str | None = None
 
     @classmethod
     def from_yaml(cls, path: str | Path) -> Scope:
@@ -24,6 +25,7 @@ class Scope:
         return cls(
             allowlist=data.get("allowlist", []),
             targets=data.get("targets", []),
+            template_dir=data.get("template_dir") or (data.get("notify") or {}).get("template_dir"),
         )
 
     def is_in_scope(self, url: str) -> bool:

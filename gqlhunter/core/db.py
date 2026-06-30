@@ -55,7 +55,21 @@ CREATE TABLE IF NOT EXISTS risk_findings (
 CREATE INDEX IF NOT EXISTS idx_endpoints_url ON endpoints(url);
 CREATE INDEX IF NOT EXISTS idx_operations_type ON operations(type);
 CREATE INDEX IF NOT EXISTS idx_risk_findings_severity ON risk_findings(severity);
-CREATE INDEX IF NOT EXISTS idx_risk_findings_op ON risk_findings(operation_type, operation_name);
+CREATE TABLE IF NOT EXISTS auth_results (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    scan_run_id INTEGER REFERENCES scan_runs(id),
+    endpoint TEXT NOT NULL,
+    classification TEXT NOT NULL
+        CHECK(classification IN ('public','auth_required','over_permissive','blocked','error')),
+    with_token_status INTEGER NOT NULL,
+    without_token_status INTEGER NOT NULL,
+    with_token_body_preview TEXT,
+    without_token_body_preview TEXT,
+    tested_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_auth_results_run ON auth_results(scan_run_id);
+CREATE INDEX IF NOT EXISTS idx_auth_results_endpoint ON auth_results(endpoint);
 """
 
 
@@ -196,6 +210,36 @@ class Database:
             "SELECT * FROM scan_runs WHERE endpoint = ? ORDER BY id ASC",
             (endpoint,),
         ).fetchall()
+        return [dict(r) for r in rows]
+
+    def insert_auth_result(
+        self,
+        scan_run_id: int,
+        endpoint: str,
+        classification: str,
+        with_token_status: int,
+        without_token_status: int,
+        with_token_body_preview: str | None = None,
+        without_token_body_preview: str | None = None,
+    ) -> int:
+        cur = self.connect().execute(
+            "INSERT INTO auth_results "
+            "(scan_run_id, endpoint, classification, with_token_status, "
+            "without_token_status, with_token_body_preview, without_token_body_preview) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?)",
+            (scan_run_id, endpoint, classification, with_token_status,
+             without_token_status, with_token_body_preview, without_token_body_preview),
+        )
+        self.connect().commit()
+        return cur.lastrowid
+
+    def get_auth_results(self, scan_run_id: int | None = None) -> list[dict[str, Any]]:
+        if scan_run_id:
+            rows = self.connect().execute(
+                "SELECT * FROM auth_results WHERE scan_run_id = ?", (scan_run_id,)
+            ).fetchall()
+        else:
+            rows = self.connect().execute("SELECT * FROM auth_results").fetchall()
         return [dict(r) for r in rows]
 
     def get_latest_scan_run(self) -> dict[str, Any] | None:

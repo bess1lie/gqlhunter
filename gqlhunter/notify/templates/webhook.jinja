@@ -1,0 +1,13 @@
+{
+  "event": "gqlhunter_scan",
+  "endpoint": "{{ endpoint }}",
+  "run_id": {{ run_id }},
+  "date": "{{ date }}",
+  "summary": {
+    "endpoints": {{ endpoints|length }},
+    "operations": {{ operations|length }},
+    "schema_types": {{ schema_types|length }},
+    "auth_results": {{ auth_results|length }},
+    "risk_findings": {{ risk_findings|length }}
+  }
+}

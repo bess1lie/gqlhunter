@@ -195,12 +195,32 @@ pre-commit install
 
 ## Roadmap
 
+### v0.1.0 — Completed
+
 - [x] Stage 1: Project skeleton, core modules, endpoint discovery, introspection, parser, CLI
 - [x] Stage 2: Risk classification (prefix heuristics) + IDOR arg detection
 - [x] Stage 3: Query/mutation generator with `max_depth` cyclic guard
 - [x] Stage 4: Auth bypass analysis with guardrail (identical-payload-only-header-differs)
 - [x] Stage 5: Schema diff (Added / Modified / Removed) + JSON export
 - [x] Stage 6: HTML report (styled, XSS-guarded), Docker, CI, README
+
+### Planned
+
+- [ ] **Persistent auth sessions** — Reuse authenticated HTTP sessions across scans;
+      store session cookies (not raw tokens) for re-authentication
+- [ ] **Batch diff over N runs** — Diff across more than 2 scan runs; detect regressions
+      (a previously REMOVED operation re-appears) and trends (args accumulating over time)
+- [ ] **WebSocket subscription tester** — Send GraphQL subscription via WebSocket,
+      capture real-time events for analysis (no auto-subscribe persistence)
+- [ ] **Batch endpoint fuzzing** — Parameterised query generator: given a mutation
+      `updateUser(id: ID!, role: String)`, produce N variants with different arg
+      combinations (still text-only, never auto-sent)
+- [ ] **Persisted auth analysis results** — Store `AuthResult` in SQLite; include
+      classification in `report` and `export` outputs
+- [ ] **VS Code extension** — Inline decorations for schema: severity badges next
+      to field names, one-click `gqlhunter diff` in editor
+- [ ] **OpenAPI / REST → GraphQL bridge detection** — Heuristic-based identification
+      of REST endpoints that wrap GraphQL queries (common in migration-phase APIs)
 
 ## Author
 

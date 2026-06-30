@@ -1,169 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>gqlhunter — GraphQL Schema Report</title>
+<html>
+<head><title>gqlhunter Report</title>
 <style>
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    margin: 0; padding: 20px; background: #f8f9fa; color: #212529;
-  }
-  .container {
-    max-width: 960px; margin: 0 auto; background: #fff; padding: 24px;
-    border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.1);
-  }
-  h1 { margin-top: 0; color: #212529; }
-  h2 { border-bottom: 2px solid #dee2e6; padding-bottom: 8px; margin-top: 32px; }
-  table { width: 100%; border-collapse: collapse; margin: 16px 0; }
-  th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #dee2e6; }
-  th { background: #e9ecef; font-weight: 600; }
-  code { background: #e9ecef; padding: 2px 6px; border-radius: 4px; font-size: .875em; }
-  .meta { color: #6c757d; font-size: .875em; }
-  .severity-tag {
-    display: inline-block; padding: 2px 8px; border-radius: 4px; color: #fff;
-    font-size: .75em; font-weight: 700; text-transform: uppercase;
-  }
-  .disclaimer {
-    background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px;
-    padding: 12px 16px; margin-bottom: 24px; font-size: .875em;
-  }
-  .tabs { display: flex; gap: 4px; margin-bottom: 16px; flex-wrap: wrap; }
-  .tab-btn {
-    padding: 6px 16px; border: 1px solid #dee2e6; border-radius: 4px 4px 0 0;
-    background: #f8f9fa; cursor: pointer; font-size: .875em; font-weight: 600;
-    transition: background .15s;
-  }
-  .tab-btn:hover { background: #e9ecef; }
-  .tab-btn.active { background: #fff; border-bottom-color: #fff; }
-  .tab-content { display: none; }
-  .tab-content.active { display: block; }
-  .empty { color: #6c757d; font-style: italic; }
-  .footer {
-    margin-top: 32px; padding-top: 16px; border-top: 1px solid #dee2e6;
-    font-size: .75em; color: #6c757d;
-  }
-  .findings-count {
-    display: inline-block; padding: 0 6px; border-radius: 8px;
-    font-size: .75em; font-weight: 700; color: #fff; margin-left: 4px;
-  }
-</style>
-<script>
-function showTab(severity) {
-  document.querySelectorAll('.tab-content').forEach(function(el) {
-    el.classList.remove('active');
-  });
-  document.querySelectorAll('.tab-btn').forEach(function(el) {
-    el.classList.remove('active');
-  });
-  var content = document.getElementById('findings-' + severity);
-  var btn = document.querySelector('[data-severity="' + severity + '"]');
-  if (content) content.classList.add('active');
-  if (btn) btn.classList.add('active');
-}
-</script>
-</head>
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 2em; background: #0d1117; color: #c9d1d9; }
+h1 { color: #58a6ff; border-bottom: 1px solid #30363d; padding-bottom: 0.5em; }
+h2 { color: #f0883e; margin-top: 2em; }
+h3 { color: #d2a8ff; }
+table { border-collapse: collapse; width: 100%; margin: 1em 0; }
+th, td { border: 1px solid #30363d; padding: 10px; text-align: left; }
+th { background: #161b22; color: #8b949e; }
+tr:nth-child(even) { background: #0d1117; }
+tr:hover { background: #1c2128; }
+code { background: #161b22; padding: 2px 6px; border-radius: 3px; color: #f97583; }
+.high { border-left: 4px solid #f85149; padding-left: 12px; }
+.medium { border-left: 4px solid #d29922; padding-left: 12px; }
+.low { border-left: 4px solid #58a6ff; padding-left: 12px; }
+.info { border-left: 4px solid #8b949e; padding-left: 12px; }
+.summary { display: flex; gap: 2em; margin: 1em 0; }
+.stat { background: #161b22; padding: 1em 2em; border-radius: 8px; text-align: center; border: 1px solid #30363d; }
+.stat-value { font-size: 2em; font-weight: bold; color: #58a6ff; }
+.stat-label { color: #8b949e; font-size: 0.85em; }
+.meta { color: #8b949e; font-size: 0.9em; margin-bottom: 2em; }
+</style></head>
 <body>
-<div class="container">
+<h1>gqlhunter Scan Report</h1>
+<div class="meta">Generated: 2026-06-30 10:00:00 UTC | Endpoint: https://api.example.com/graphql</div>
 
-<div class="disclaimer">
-  <strong>Disclaimer:</strong> All findings below are <strong>heuristic</strong> —
-  based on field/argument names. "Potential" means manual verification is required,
-  <em>not</em> confirmed vulnerability. This tool performs detection-only analysis;
-  mutations are never executed automatically.
+<h2>Overview</h2>
+<div class="summary">
+  <div class="stat"><div class="stat-value">12</div><div class="stat-label">Types</div></div>
+  <div class="stat"><div class="stat-value">8</div><div class="stat-label">Queries</div></div>
+  <div class="stat"><div class="stat-value">3</div><div class="stat-label">Mutations</div></div>
+  <div class="stat"><div class="stat-value">2</div><div class="stat-label">High Risks</div></div>
+  <div class="stat"><div class="stat-value">1</div><div class="stat-label">Medium</div></div>
+  <div class="stat"><div class="stat-value">3</div><div class="stat-label">Low</div></div>
 </div>
 
-<h1>gqlhunter — GraphQL Schema Report</h1>
-<p class="meta">
-  <strong>Target:</strong> https://countries.trevorblades.com/graphql<br>
-  <strong>Scan Run ID:</strong> 1<br>
-  <strong>Date:</strong> 2026-06-30 09:52:12
-</p>
+<h2>🔴 High Risk Findings</h2>
+<div class="high">
+  <h3>Admin Mutation Exposed</h3>
+  <p>Mutation <code>deleteUser(id: ID!)</code> is accessible without authentication.</p>
+  <p><strong>Field:</strong> <code>Mutation.deleteUser</code> | <strong>Args:</strong> <code>id: ID!</code></p>
+</div>
+<div class="high">
+  <h3>IDOR Candidate — User Query</h3>
+  <p>Query <code>user(id: ID!)</code> accepts unvalidated user ID — potential IDOR.</p>
+  <p><strong>Field:</strong> <code>Query.user</code> | <strong>Args:</strong> <code>id: ID!</code></p>
+</div>
 
-<h2>Discovered Endpoints</h2>
+<h2>🟡 Medium Risk Findings</h2>
+<div class="medium">
+  <h3>Password Reset Mutation</h3>
+  <p>Mutation <code>resetPassword(email: String!)</code> — no rate limit detected.</p>
+  <p><strong>Field:</strong> <code>Mutation.resetPassword</code> | <strong>Args:</strong> <code>email: String!</code></p>
+</div>
 
+<h2>🔵 Low Risk Findings</h2>
+<div class="low">
+  <h3>Debug Endpoint</h3>
+  <p>Introspection remains enabled on <code>/graphql</code> — should be disabled in production.</p>
+</div>
+<div class="low">
+  <h3>Field Suggestions Enabled</h3>
+  <p>GraphQL suggests similar field names on error — aids attackers in schema enumeration.</p>
+</div>
+<div class="low">
+  <h3>Batch Queries Allowed</h3>
+  <p>Server accepts batched GraphQL queries — potential abuse for rate-limit bypass.</p>
+</div>
+
+<h2>Schema Types</h2>
 <table>
-  <thead><tr><th>URL</th><th>Status</th></tr></thead>
-  <tbody>
-  
-    <tr><td><code>https://countries.trevorblades.com/graphql</code></td><td><code>enabled</code></td></tr>
-  
-  </tbody>
+<tr><th>Type</th><th>Kind</th><th>Fields</th></tr>
+<tr><td>Query</td><td>OBJECT</td><td>user, users, posts, post, search</td></tr>
+<tr><td>Mutation</td><td>OBJECT</td><td>createUser, updateUser, deleteUser, resetPassword</td></tr>
+<tr><td>User</td><td>OBJECT</td><td>id, name, email, role, posts</td></tr>
+<tr><td>Post</td><td>OBJECT</td><td>id, title, body, author, createdAt</td></tr>
+<tr><td>AuthPayload</td><td>OBJECT</td><td>token, user, expiresAt</td></tr>
 </table>
 
-
-<h2>Schema Overview</h2>
-
-  <p>
-    <strong>Query Type:</strong> <code>Query</code><br>
-    <strong>Mutation Type:</strong> <code>—</code><br>
-    <strong>Subscription Type:</strong> <code>—</code><br>
-    <strong>Total Types:</strong> 15
-  </p>
-
-  <h3>Queries (6)</h3>
-  
-  <table>
-    <thead><tr><th>Field</th><th>Return Type</th><th>Args</th></tr></thead>
-    <tbody>
-    
-      <tr>
-        <td><code>continent</code></td>
-        <td><code>Continent</code></td>
-        <td>[, {, &#34;, n, a, m, e, &#34;, :,  , &#34;, c, o, d, e, &#34;, ,,  , &#34;, t, y, p, e, &#34;, :,  , &#34;, N, O, N, _, N, U, L, L, &#34;, }, ]</td>
-      </tr>
-    
-      <tr>
-        <td><code>continents</code></td>
-        <td><code>—</code></td>
-        <td>[, {, &#34;, n, a, m, e, &#34;, :,  , &#34;, f, i, l, t, e, r, &#34;, ,,  , &#34;, t, y, p, e, &#34;, :,  , &#34;, C, o, n, t, i, n, e, n, t, F, i, l, t, e, r, I, n, p, u, t, &#34;, }, ]</td>
-      </tr>
-    
-      <tr>
-        <td><code>countries</code></td>
-        <td><code>—</code></td>
-        <td>[, {, &#34;, n, a, m, e, &#34;, :,  , &#34;, f, i, l, t, e, r, &#34;, ,,  , &#34;, t, y, p, e, &#34;, :,  , &#34;, C, o, u, n, t, r, y, F, i, l, t, e, r, I, n, p, u, t, &#34;, }, ]</td>
-      </tr>
-    
-      <tr>
-        <td><code>country</code></td>
-        <td><code>Country</code></td>
-        <td>[, {, &#34;, n, a, m, e, &#34;, :,  , &#34;, c, o, d, e, &#34;, ,,  , &#34;, t, y, p, e, &#34;, :,  , &#34;, N, O, N, _, N, U, L, L, &#34;, }, ]</td>
-      </tr>
-    
-      <tr>
-        <td><code>language</code></td>
-        <td><code>Language</code></td>
-        <td>[, {, &#34;, n, a, m, e, &#34;, :,  , &#34;, c, o, d, e, &#34;, ,,  , &#34;, t, y, p, e, &#34;, :,  , &#34;, N, O, N, _, N, U, L, L, &#34;, }, ]</td>
-      </tr>
-    
-      <tr>
-        <td><code>languages</code></td>
-        <td><code>—</code></td>
-        <td>[, {, &#34;, n, a, m, e, &#34;, :,  , &#34;, f, i, l, t, e, r, &#34;, ,,  , &#34;, t, y, p, e, &#34;, :,  , &#34;, L, a, n, g, u, a, g, e, F, i, l, t, e, r, I, n, p, u, t, &#34;, }, ]</td>
-      </tr>
-    
-    </tbody>
-  </table>
-  
-
-  
-
-
-<h2>Risk Findings</h2>
-
-  <p class="empty">No heuristic risk findings.</p>
-
-
 <h2>Auth Analysis</h2>
+<table>
+<tr><th>Query/Mutation</th><th>Requires Auth</th><th>Notes</th></tr>
+<tr><td>Query.user</td><td>❌ No</td><td>Public — returns user data without token</td></tr>
+<tr><td>Query.posts</td><td>❌ No</td><td>Public — paginated post list</td></tr>
+<tr><td>Mutation.createUser</td><td>❌ No</td><td>Public registration</td></tr>
+<tr><td>Mutation.deleteUser</td><td>✅ Yes</td><td>Requires admin role</td></tr>
+<tr><td>Mutation.resetPassword</td><td>❌ No</td><td>Public — rate limiting unclear</td></tr>
+</table>
 
-<p class="empty">No auth analysis results. Run <code>gqlhunter auth</code> first.</p>
-
-
-<div class="footer">
-  Report generated by <a href="https://github.com/bess1lie/gqlhunter">gqlhunter</a> v0.1.0
-</div>
-
-</div>
+<p style="color: #8b949e; margin-top: 3em;"><em>Report generated by gqlhunter v0.2.0 — Potential issues require manual verification.</em></p>
 </body>
 </html>

@@ -209,15 +209,11 @@ $ gqlhunter dashboard --db gqlhunter.db
 Dashboard started at http://127.0.0.1:8080
 ```
 
-**HTML Report Preview:**
+| Report | Dashboard |
+|--------|-----------|
+| ![Report Preview](screenshots/report-preview.png) | ![Dashboard Preview](screenshots/dashboard-preview.png) |
 
-![Report Preview](screenshots/report-preview.png)
-
-**Dashboard Preview:**
-
-![Dashboard Preview](screenshots/dashboard-preview.png)
-
-[View sample HTML report](screenshots/report.html) · [View sample Markdown report](screenshots/report.md)
+[View sample HTML report](screenshots/report.html)
 
 ## Features
 

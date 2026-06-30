@@ -1,0 +1,14 @@
+# gqlhunter scope file — copy to scope.yaml and edit with your endpoints.
+#   cp scope.example.yaml scope.yaml
+#
+# See docs/scope.md for the full format and matching rules.
+
+targets:
+  - "*.example.com"
+  - "!admin.example.com"
+
+allowlist:
+  - "*.example.com"
+
+deny:
+  - "staging.example.com"

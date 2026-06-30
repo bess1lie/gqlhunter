@@ -1,5 +1,0 @@
-targets:
-  - "*.trevorblades.com"
-allowlist:
-  - "*.trevorblades.com"
-deny: []

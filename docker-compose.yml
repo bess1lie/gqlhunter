@@ -1,0 +1,6 @@
+services:
+  gqlhunter:
+    build: .
+    volumes:
+      - .:/app
+    entrypoint: ["gqlhunter"]

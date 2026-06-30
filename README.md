@@ -132,31 +132,30 @@ gqlhunter dashboard --db ./gqlhunter.db --host 0.0.0.0 --port 9090  # network ac
 
 ## Features
 
-| Feature | Stage |
-|---|---|
-| Endpoint discovery (18 common paths + custom) | Stage 1 |
-| Introspection query + 6-status classification | Stage 1 |
-| Schema parsing & SQLite storage | Stage 1 |
-| Markdown & HTML reports (with severity coloring) | Stage 1 + 6 |
-| Risk classification (field-name heuristics) | Stage 2 |
-| IDOR candidate detection (argument name heuristics) | Stage 2 |
-| Read-only query generator | Stage 3 |
-| Mutation templates (text-only, never auto-sent) | Stage 3 |
-| Cyclic schema guard (`max_depth=3`, no visited-types) | Stage 3 |
-| Configurable introspection depth (`--max-depth`) | Stage 3 |
-| Auth bypass analysis (with/without token comparison) | Stage 4 |
-| Persistent auth sessions (`--session` / `--save-session`) | Stage 4 |
-| Schema diff across scan runs (Added / Modified / Removed) | Stage 5 |
-| JSON export (no tokens leaked, auth results included) | Stage 5 |
-| SARIF export | Stage 5 |
-| HTML report with XSS protection (Jinja2 autoescape) | Stage 6 |
-| Tabbed findings by severity (Critical / High / Medium / Low / Info) | Stage 6 |
-| Query variant engine (single / combinations / random) | Stage 6 |
-| Template-based notifications (Slack, Telegram, Webhook) | Stage 6 |
-| Web dashboard (HTTPServer, /api/runs, /report/:id) | Stage 6 |
-| Report / export severity filtering (`--severity`) | Stage 6 |
-| Operations sorted alphabetically in reports and export | Stage 6 |
-| Docker support | Stage 6 |
+| Domain | Feature |
+|--------|---------|
+| **Discovery** | Endpoint discovery (18 common paths + custom) |
+| **Schema** | Introspection query + 6-status classification |
+| | Schema parsing & SQLite storage |
+| | Cyclic schema guard (`max_depth=3`) |
+| | Configurable introspection depth (`--max-depth`) ¹ |
+| **Analysis** | Risk classification (field-name heuristics) |
+| | IDOR candidate detection (argument heuristics) |
+| | Read-only query & mutation generator |
+| | Query variant engine (single / combinations / random) ¹ |
+| **Auth** | Auth bypass analysis (with/without token) |
+| | Persistent auth sessions (`--session` / `--save-session`) ¹ |
+| **Diff & Export** | Schema diff across scan runs (Added / Modified / Removed) |
+| | JSON export (no tokens leaked, auth results included) |
+| | SARIF export ¹ |
+| **Reporting** | Markdown & HTML reports (Jinja2, XSS-guarded) |
+| | Tabbed findings by severity ¹ |
+| | Severity filtering (`--severity`) ¹ |
+| **Dashboard** | Web dashboard (`gqlhunter dashboard`) ¹ |
+| **Notifications** | Template-based (Slack, Telegram, Webhook) ¹ |
+| **Deployment** | Docker support |
+
+¹ Added in v0.2.0 — all other features were in v0.1.0.
 
 ## Design Decisions
 

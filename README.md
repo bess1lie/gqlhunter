@@ -3,6 +3,7 @@
   <img src="https://img.shields.io/github/actions/workflow/status/bess1lie/gqlhunter/ci.yml?style=for-the-badge&logo=github&label=CI">
   <img src="https://img.shields.io/badge/tests-195_passed-brightgreen?style=for-the-badge&logo=pytest">
   <img src="https://img.shields.io/github/license/bess1lie/gqlhunter?style=for-the-badge">
+  <img src="https://img.shields.io/github/v/release/bess1lie/gqlhunter?style=for-the-badge">
 </p>
 
 <p align="center">
@@ -114,9 +115,25 @@ Ready-to-use Dockerfile and docker-compose.
 
 ---
 
+## Built With
+
+[![Python](https://img.shields.io/badge/Python-3.11+-blue?logo=python)](https://python.org)
+[![Typer](https://img.shields.io/badge/Typer-CLI-333?logo=python)](https://typer.tiangolo.com)
+[![httpx](https://img.shields.io/badge/httpx-Async-333)](https://www.python-httpx.org)
+[![SQLite](https://img.shields.io/badge/SQLite-DB-003B57?logo=sqlite)](https://sqlite.org)
+[![Jinja2](https://img.shields.io/badge/Jinja2-Reports-B41717?logo=jinja)](https://jinja.palletsprojects.com)
+[![Rich](https://img.shields.io/badge/Rich-Terminal-333)](https://rich.readthedocs.io)
+
+| | |
+|---|---|
+| **195 tests** across all modules | **10 CLI commands** from discovery to dashboard |
+| **18 discovery paths** scanned | **7 database tables** for full audit trail |
+
+---
+
 ## Comparison
 
-| Feature | Manual GraphQL | GraphQL Voyager | gqlhunter |
+| Feature | Manual Workflow | GraphQL Voyager | gqlhunter |
 |---------|---------------|-----------------|-----------|
 | Endpoint discovery | ❌ | ❌ | ✓ |
 | Introspection | Manual query | ✓ | ✓ |
@@ -209,27 +226,27 @@ Jinja2 auto-escape enabled for all `["html", "xml"]`. Confirmed by `test_script_
 
 ```
 gqlhunter/
-├── cli.py           # Typer CLI (10 commands)
-├── auth/            # Auth bypass + session management
-├── core/            # SQLite, HTTP client, scope
+├── cli.py           # Typer CLI
+├── auth/            # Authentication analysis
+├── core/            # SQLite · HTTP · scope
 ├── dashboard.py     # Web dashboard
 ├── discovery/       # Endpoint discovery
-├── generator/       # Query variant builder
+├── generator/       # Query variants
 ├── introspection/   # GraphQL introspection
-├── notify/          # Slack / Telegram / Webhook
-├── report/          # HTML + Markdown + SARIF
+├── notify/          # Slack · Telegram · Webhook
+├── report/          # HTML · Markdown · SARIF
 ├── schema/          # Schema parser
 └── variants/        # Variant engine
 ```
 
 ---
 
-## Roadmap
+## Releases
 
-### v0.2 ✓
+### v0.2 — Current
 - [x] Auth persistence · Query variants · Dashboard · SARIF · 195 tests
 
-### v0.3
+### v0.3 — Next
 - [ ] Batch diff over N runs
 - [ ] WebSocket subscription tester
 - [ ] VS Code extension (inline severity badges)
